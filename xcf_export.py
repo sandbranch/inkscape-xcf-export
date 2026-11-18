@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# coding=utf-8
 #
 # Copyright (C) 2006 Aaron Spike, aaron@ekips.org
 # Copyright (C) 2010-2012 Nicolas Dufour, nicoduf@yahoo.fr
@@ -28,12 +27,11 @@ blend modes are kept as layer properties instead of being baked in.
 import copy
 import os
 
-import numpy as np
-from PIL import Image
-
 import inkex
+import numpy as np
 from inkex.command import inkscape
 from inkex.localization import inkex_gettext as _
+from PIL import Image
 
 import xcf_writer as xcf
 from css_blend import INEXACT, bake_blend
@@ -169,7 +167,7 @@ class XcfOutput(inkex.OutputExtension):
         together as a single pixel layer."""
         self._serial += 1
         group = inkex.Group()
-        group.set("id", "xcf-export-run-%d" % self._serial)
+        group.set("id", f"xcf-export-run-{self._serial}")
         run[0].addprevious(group)
         for node in run:
             group.append(node)
@@ -199,12 +197,12 @@ class XcfOutput(inkex.OutputExtension):
         for entry in items:
             if isinstance(entry, list):
                 count += 1
-                label = name if runs == 1 else "%s (%d)" % (name, count)
+                label = name if runs == 1 else f"{name} ({count})"
                 if top:
                     label = (
                         _("Objects outside layers")
                         if runs == 1
-                        else "%s (%d)" % (_("Objects outside layers"), count)
+                        else f"{_('Objects outside layers')} ({count})"
                     )
                 planned.append(self._wrap(parent, entry, label))
             else:
@@ -293,13 +291,13 @@ class XcfOutput(inkex.OutputExtension):
         doc.write(svg_file)
         actions = [
             "export-area-page",
-            "export-dpi:%g" % self.options.dpi,
+            f"export-dpi:{self.options.dpi:g}",
             "export-background-opacity:0",
             "export-id-only",
         ]
         files = {}
         for index, node_id in enumerate(ids):
-            png = os.path.join(self.tempdir, "layer-%d.png" % index)
+            png = os.path.join(self.tempdir, f"layer-{index}.png")
             files[node_id] = png
             actions += ["export-id:" + node_id, "export-filename:" + png, "export-do"]
         inkscape(svg_file, actions=";".join(actions))
@@ -343,7 +341,7 @@ class XcfOutput(inkex.OutputExtension):
                 node = parent
             actions = [
                 "export-area-page",
-                "export-dpi:%g" % self.options.dpi,
+                f"export-dpi:{self.options.dpi:g}",
                 "export-background-opacity:0",
             ]
             if context is not root:
@@ -354,8 +352,8 @@ class XcfOutput(inkex.OutputExtension):
                         del style[key]
                 context.style = style
                 actions += ["export-id:" + item.context, "export-id-only"]
-            svg_file = os.path.join(self.tempdir, "backdrop-%d.svg" % index)
-            png = os.path.join(self.tempdir, "backdrop-%d.png" % index)
+            svg_file = os.path.join(self.tempdir, f"backdrop-{index}.svg")
+            png = os.path.join(self.tempdir, f"backdrop-{index}.png")
             doc.write(svg_file)
             inkscape(
                 svg_file,
@@ -418,7 +416,7 @@ class XcfOutput(inkex.OutputExtension):
             if item.node_id in backdrops:
                 data = bake_blend(item.blend, data, backdrops[item.node_id])
                 mode, blend_space, composite_mode = xcf.MODE_NORMAL, None, None
-                name = "%s (%s)" % (name, item.blend)
+                name = f"{name} ({item.blend})"
             elif item.blend in INEXACT:
                 self.approximate.append(item.name)
             x = y = 0

@@ -109,6 +109,23 @@ own profile).
 Not tested yet: the options dialog itself, GIMP 2.10, Inkscape before
 1.4.4, Windows and macOS.
 
+## Upstream
+
+This is meant to replace `gimp_xcf.py` in
+[inkscape/extensions](https://gitlab.com/inkscape/extensions), keeping
+its extension id, class name, short options and defaults (guides and
+grid off there). To build that change in a checkout of inkscape/extensions:
+
+    dev/make-upstream.py ../inkscape-extensions
+    (cd ../inkscape-extensions && ruff format gimp_xcf.py xcf_writer.py \
+        css_blend.py tests/test_gimp_xcf.py tests/test_xcf_writer.py)
+    dev/record-upstream-mocks.sh ../inkscape-extensions
+
+The last step records the Inkscape calls the tests replay (upstream CI
+has neither Inkscape nor GIMP) and the expected XCF files, following
+upstream's own workflow, then runs the tests as CI does. The checkout
+needs a `.venv` with upstream's test dependencies.
+
 ## How
 
 `xcf_writer.py` is a small standalone XCF writer (numpy and zlib):

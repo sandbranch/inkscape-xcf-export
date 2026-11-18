@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-# coding=utf-8
 #
 # Copyright (C) 2026 David
 #
@@ -216,9 +214,9 @@ def grid_parasite(xspacing, yspacing, xoffset=0.0, yoffset=0.0):
     """The "gimp-image-grid" parasite as GIMP 3.2 writes it (only the
     spacing and offset, in pixels; GIMP fills in the rest)."""
     text = (
-        "(xspacing {:f})\n(yspacing {:f})\n(spacing-unit pixels)\n"
-        "(xoffset {:f})\n(yoffset {:f})\n(offset-unit pixels)\n"
-    ).format(xspacing, yspacing, xoffset, yoffset)
+        f"(xspacing {xspacing:f})\n(yspacing {yspacing:f})\n(spacing-unit pixels)\n"
+        f"(xoffset {xoffset:f})\n(yoffset {yoffset:f})\n(offset-unit pixels)\n"
+    )
     return "gimp-image-grid", 1, text.encode("utf-8") + b"\0"
 
 
@@ -235,7 +233,7 @@ class XcfImage:
         self.parasites = []  # (name, flags, bytes)
 
     def add_guide(self, orientation, position):
-        self.guides.append((orientation, int(round(position))))
+        self.guides.append((orientation, round(position)))
 
     def save(self, stream):
         stream.write(self.tobytes())
@@ -293,7 +291,7 @@ class XcfImage:
         if len(path) > 1:
             out.write(_prop(PROP_ITEM_PATH, b"".join(_u32(i) for i in path)))
         opacity = min(1.0, max(0.0, item.opacity))
-        out.write(_prop(PROP_OPACITY, _u32(int(round(opacity * 255)))))
+        out.write(_prop(PROP_OPACITY, _u32(round(opacity * 255))))
         out.write(_prop(PROP_FLOAT_OPACITY, struct.pack(">f", opacity)))
         out.write(_prop(PROP_VISIBLE, _u32(1 if item.visible else 0)))
         out.write(_prop(PROP_MODE, _u32(item.mode)))

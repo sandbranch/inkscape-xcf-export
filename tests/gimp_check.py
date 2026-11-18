@@ -34,7 +34,7 @@ def tree(layers):
 for path in os.environ["TEST_XCFS"].split():
     try:
         image = Gimp.file_load(Gimp.RunMode.NONINTERACTIVE, Gio.File.new_for_path(path))
-    except Exception as error:  # report, keep going
+    except Exception as error:  # noqa: BLE001 (report any failure, keep going)
         with open(path[:-4] + ".gimp.json", "w") as f:
             json.dump({"error": str(error)}, f)
         continue

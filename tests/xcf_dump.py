@@ -105,7 +105,7 @@ def decode(ptype, payload):
     if ptype == 19:
         return [round(v, 3) for v in struct.unpack(">ff", payload)]
     if ptype == 30:
-        return list(struct.unpack(">%dI" % (len(payload) // 4), payload))
+        return list(struct.unpack(f">{len(payload) // 4}I", payload))
     if ptype == 18:
         return [
             [struct.unpack_from(">i", payload, i)[0], "hv"[payload[i + 4] - 1]]
@@ -176,10 +176,10 @@ def read_pixels(r, compression):
         elif compression == 2:
             tile = zlib.decompressobj().decompress(raw)
         else:
-            raise ValueError("unknown compression %d" % compression)
+            raise ValueError(f"unknown compression {compression}")
         if len(tile) != count * bpp:
             raise ValueError(
-                "tile %d has %d bytes, expected %d" % (index, len(tile), count * bpp)
+                f"tile {index} has {len(tile)} bytes, expected {count * bpp}"
             )
         for row in range(th):
             y = ty * 64 + row
@@ -243,7 +243,7 @@ def parse(data, pixels=False):
         layer["mask"] = r.pointer()
         if pixels:
             r.pos = hptr
-            hw, hh, bpp = r.u32(), r.u32(), r.u32()
+            _hw, _hh, _bpp = r.u32(), r.u32(), r.u32()
             r.pointer()
             layer["dummy_levels"] = dummy_levels(r)
             r.pos = hptr

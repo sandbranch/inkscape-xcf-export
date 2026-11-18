@@ -23,9 +23,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(HERE))
 sys.path.insert(0, HERE)
 
-import css_blend  # noqa: E402
-import xcf_dump  # noqa: E402
-import xcf_writer as xcf  # noqa: E402
+import xcf_dump
+
+import css_blend
+import xcf_writer as xcf
 
 REFERENCE = os.path.join(HERE, "data", "gimp-reference.xcf")
 
@@ -113,11 +114,13 @@ def test_round_trip_matches_gimp_reference():
 
 def test_grid_parasite_is_what_gimp_writes():
     gimps = xcf_dump.dump(REFERENCE)
-    grid = [p for p in gimps["props"]["PARASITES"] if p["name"] == "gimp-image-grid"][0]
+    grid = next(
+        p for p in gimps["props"]["PARASITES"] if p["name"] == "gimp-image-grid"
+    )
     name, flags, data = xcf.grid_parasite(16, 8)
     assert name == grid["name"] and flags == grid["flags"]
     for key in ("xspacing", "yspacing"):
-        assert "(%s " % key in grid["data"] and "(%s " % key in data.decode()
+        assert f"({key} " in grid["data"] and f"({key} " in data.decode()
 
 
 @pytest.mark.parametrize(

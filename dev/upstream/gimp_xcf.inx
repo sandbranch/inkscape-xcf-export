@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+    <name>GIMP XCF</name>
+    <id>org.ekips.output.gimp_xcf</id>
+    <dependency type="extension">org.inkscape.output.svg.inkscape</dependency>
+    <param name="tab" type="notebook">
+        <page name="Options" gui-text="Options">
+            <param name="dpi" type="float" min="1" max="3000" gui-text="File Resolution:" gui-description="XCF file resolution, in DPI.">96</param>
+            <param name="groups" type="bool" gui-text="Sublayers as layer groups" gui-description="Turn each layer that has sublayers into a GIMP layer group. Off: one GIMP layer per top-level layer.">true</param>
+            <param name="crop" type="bool" gui-text="Crop layers to their content" gui-description="Make each GIMP layer only as large as what it shows. Off: every layer is the size of the page.">true</param>
+            <param name="hidden" type="bool" gui-text="Include hidden layers" gui-description="Save hidden layers too; they stay hidden in GIMP.">true</param>
+            <param name="background" type="bool" gui-text="Save Background" gui-description="Add a bottom layer filled with the page colour.">false</param>
+            <param name="guides" type="bool" gui-text="Save Guides" gui-description="Convert horizontal and vertical guides to GIMP guides.">false</param>
+            <param name="grid" type="bool" gui-text="Save Grid" gui-description="Convert the first rectangular grid to the GIMP image grid.">false</param>
+            <param name="blend" type="optiongroup" appearance="combo" gui-text="Blend modes GIMP lacks:" gui-description="Color dodge, color burn, soft light, hue, saturation, color and luminosity work differently in GIMP.">
+                <option value="bake">Bake into the layer (looks the same)</option>
+                <option value="gimp">Nearest GIMP mode (stays editable)</option>
+            </param>
+            <param name="linear" type="bool" gui-text="Blend in linear light (GIMP default)" gui-description="Off: layers blend in sRGB, as Inkscape draws them, so the image looks the same in GIMP. On: GIMP's own default.">false</param>
+        </page>
+        <page name="Help" gui-text="Help">
+            <label xml:space="preserve">This extension saves the document as a layered GIMP XCF file. GIMP itself is not needed.
+
+Each layer becomes a GIMP layer; layers with sublayers become layer groups. Objects outside any layer get a layer of their own. Layer visibility, opacity and blend mode stay editable in GIMP. A filter, clip or mask on a layer with sublayers is rendered into a single layer.</label>
+        </page>
+    </param>
+    <output>
+        <extension>.xcf</extension>
+        <mimetype>application/x-xcf</mimetype>
+        <filetypename>GIMP XCF maintaining layers (*.xcf)</filetypename>
+        <filetypetooltip>GIMP XCF maintaining layers (*.xcf)</filetypetooltip>
+        <dataloss>true</dataloss>
+    </output>
+    <script>
+        <command location="inx" interpreter="python">gimp_xcf.py</command>
+        <helper_extension>org.inkscape.output.svg.inkscape</helper_extension>
+    </script>
+</inkscape-extension>

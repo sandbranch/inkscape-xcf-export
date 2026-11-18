@@ -36,38 +36,36 @@ def pixel_check(work, name, variant):
         return False, "no flattened image from GIMP"
     got = premultiplied(got_path)
     if ref.shape != got.shape:
-        return False, "size %s, Inkscape %s" % (got.shape[:2], ref.shape[:2])
+        return False, f"size {got.shape[:2]}, Inkscape {ref.shape[:2]}"
     diff = np.abs(ref - got).max(axis=2)
     mean, worst = diff.mean(), diff.max()
     over = (diff > 8).mean() * 100
     ok = mean < 0.5 and over <= 0.5
-    return ok, "mean %.3f, max %d, %.3f %% of pixels over 8" % (mean, worst, over)
+    return ok, f"mean {mean:.3f}, max {worst:.0f}, {over:.3f} % of pixels over 8"
 
 
 def subset(expect, got, where="layers"):
     """Every key in `expect` must match in `got`; lists match item by item."""
     if isinstance(expect, dict):
         if not isinstance(got, dict):
-            return ["%s: expected an object" % where]
+            return [f"{where}: expected an object"]
         errors = []
         for key, value in expect.items():
             if key not in got:
-                errors.append("%s.%s missing" % (where, key))
+                errors.append(f"{where}.{key} missing")
             else:
-                errors += subset(value, got[key], "%s.%s" % (where, key))
+                errors += subset(value, got[key], f"{where}.{key}")
         return errors
     if isinstance(expect, list):
         if not isinstance(got, list) or len(got) != len(expect):
-            return [
-                "%s: expected %d entries, got %s"
-                % (where, len(expect), len(got) if isinstance(got, list) else got)
-            ]
+            count = len(got) if isinstance(got, list) else got
+            return [f"{where}: expected {len(expect)} entries, got {count}"]
         errors = []
         for i, (e, g) in enumerate(zip(expect, got)):
-            errors += subset(e, g, "%s[%d]" % (where, i))
+            errors += subset(e, g, f"{where}[{i}]")
         return errors
     if expect != got:
-        return ["%s: expected %r, got %r" % (where, expect, got)]
+        return [f"{where}: expected {expect!r}, got {got!r}"]
     return []
 
 
@@ -93,13 +91,13 @@ def main():
         base = base_name(variant)
         gimp_json = os.path.join(work, variant + ".gimp.json")
         if not os.path.exists(gimp_json):
-            print("FAIL %s: GIMP wrote no report" % variant)
+            print(f"FAIL {variant}: GIMP wrote no report")
             failed += 1
             continue
         with open(gimp_json) as f:
             info = json.load(f)
         if "error" in info:
-            print("FAIL %s: GIMP could not load it: %s" % (variant, info["error"]))
+            print("FAIL {}: GIMP could not load it: {}".format(variant, info["error"]))
             failed += 1
             continue
         expect_path = os.path.join(HERE, "data", variant + ".expect.json")
@@ -109,12 +107,12 @@ def main():
             with open(expect_path) as f:
                 errors = subset(json.load(f), info, "image")
             for error in errors:
-                print("FAIL %s structure: %s" % (variant, error))
+                print(f"FAIL {variant} structure: {error}")
             failed += bool(errors)
             if not errors:
-                print("ok   %s structure" % variant)
+                print(f"ok   {variant} structure")
         else:
-            print("--   %s structure: no expectations" % variant)
+            print(f"--   {variant} structure: no expectations")
         if variant.endswith(NO_PIXELS):
             continue
         ref = (
@@ -123,9 +121,9 @@ def main():
             else base
         )
         ok, detail = pixel_check(work, ref, variant)
-        print("%s %s pixels: %s" % ("ok  " if ok else "FAIL", variant, detail))
+        print("{} {} pixels: {}".format("ok  " if ok else "FAIL", variant, detail))
         failed += not ok
-    print("ALL PASS" if not failed else "%d FAILED" % failed)
+    print("ALL PASS" if not failed else f"{failed} FAILED")
     return 1 if failed else 0
 
 
