@@ -1,0 +1,70 @@
+{
+ "width": 200,
+ "height": 125,
+ "layers": [
+  {
+   "name": "luminosity (luminosity)",
+   "mode": 28
+  },
+  {
+   "name": "color (color)",
+   "mode": 28
+  },
+  {
+   "name": "saturation (saturation)",
+   "mode": 28
+  },
+  {
+   "name": "hue (hue)",
+   "mode": 28
+  },
+  {
+   "name": "exclusion",
+   "mode": 52
+  },
+  {
+   "name": "difference",
+   "mode": 32
+  },
+  {
+   "name": "soft-light (soft-light)",
+   "mode": 28
+  },
+  {
+   "name": "hard-light",
+   "mode": 44
+  },
+  {
+   "name": "color-burn (color-burn)",
+   "mode": 28
+  },
+  {
+   "name": "color-dodge (color-dodge)",
+   "mode": 28
+  },
+  {
+   "name": "lighten",
+   "mode": 36
+  },
+  {
+   "name": "darken",
+   "mode": 35
+  },
+  {
+   "name": "overlay",
+   "mode": 23
+  },
+  {
+   "name": "screen",
+   "mode": 31
+  },
+  {
+   "name": "multiply",
+   "mode": 30
+  },
+  {
+   "name": "Base",
+   "mode": 28
+  }
+ ]
+}

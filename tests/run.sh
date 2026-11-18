@@ -23,6 +23,10 @@ mkdir -p "$work"
 
 if flatpak info org.inkscape.Inkscape >/dev/null 2>&1; then
     ink () { flatpak run --filesystem="$repo" org.inkscape.Inkscape "$@"; }
+    ink_profile () {
+        flatpak run --filesystem="$repo" --env=INKSCAPE_PROFILE_DIR="$INKSCAPE_PROFILE_DIR" \
+            org.inkscape.Inkscape "$@"
+    }
     ext_python () {
         flatpak run --filesystem="$repo" \
             --env=PYTHONPATH=/app/share/inkscape/extensions \
@@ -30,16 +34,21 @@ if flatpak info org.inkscape.Inkscape >/dev/null 2>&1; then
     }
 else
     ink () { inkscape "$@"; }
+    ink_profile () { inkscape "$@"; }
     ext_python () {
         PYTHONPATH=${INKSCAPE_EXTENSIONS:-/usr/share/inkscape/extensions} python3 "$@"
     }
 fi
 
 if [ $# -eq 0 ]; then
-    set -- $(cd "$here/data" && ls *.svg | sed 's/\.svg$//')
+    set -- $(cd "$here/data" && ls *.svg | sed 's/\.svg$//' | grep -v '^empty$')
 fi
 
+status=0
 xcfs=
+variants=
+add () { xcfs="$xcfs $work/$1.xcf"; variants="$variants $1"; }
+
 for name in "$@"; do
     svg=$here/data/$name.svg
     ext_python "$repo/xcf_export.py" --grid=true \
@@ -49,7 +58,8 @@ for name in "$@"; do
     ink "$svg" --export-area-page --export-background-opacity=0 \
         --export-filename="$work/$name.ink.png" 2>/dev/null
     python3 "$here/xcf_dump.py" "$work/$name.xcf" > "$work/$name.dump.txt"
-    xcfs="$xcfs $work/$name.xcf $work/$name-linear.xcf"
+    add "$name"
+    add "$name-linear"
 done
 
 # the option switches, on one drawing: name "layers-opts"
@@ -57,10 +67,53 @@ if [ -f "$here/data/layers.svg" ]; then
     ext_python "$repo/xcf_export.py" --groups=false --hidden=false \
         --crop=false --background=true --dpi=300 --guides=false \
         --output="$work/layers-opts.xcf" "$here/data/layers.svg"
-    xcfs="$xcfs $work/layers-opts.xcf"
+    add layers-opts
     ink "$here/data/layers.svg" --export-area-page --export-dpi=300 \
         --export-background="#ffeedd" --export-background-opacity=1 \
         --export-filename="$work/layers-opts.ink.png" 2>/dev/null
+fi
+
+# blend modes GIMP lacks, kept as GIMP's nearest modes: name "blend-gimp"
+if [ -f "$here/data/blend.svg" ]; then
+    ext_python "$repo/xcf_export.py" --blend=gimp \
+        --output="$work/blend-gimp.xcf" "$here/data/blend.svg" \
+        2>"$work/blend-gimp.err"
+    if grep -q "no exact match" "$work/blend-gimp.err"; then
+        echo "ok   blend-gimp warns about the approximate layers"
+    else
+        echo "FAIL blend-gimp: no warning about approximate blend modes"
+        status=1
+    fi
+    add blend-gimp
+fi
+
+# through Inkscape's own extension machinery (the .inx), with a throwaway
+# Inkscape profile so the user's own extensions are not involved
+profile=$work/inkscape-profile
+mkdir -p "$profile/extensions/xcf-export"
+for f in xcf_export.inx xcf_export.py xcf_writer.py css_blend.py; do
+    ln -sf "$repo/$f" "$profile/extensions/xcf-export/$f"
+done
+if INKSCAPE_PROFILE_DIR=$profile ink_profile "$here/data/layers.svg" \
+        --export-extension=org.sandbranch.output.xcf \
+        --export-filename="$work/layers-ext.xcf" >"$work/layers-ext.log" 2>&1 \
+        && [ -s "$work/layers-ext.xcf" ]; then
+    add layers-ext
+else
+    echo "FAIL layers-ext: Inkscape did not export through the .inx, see $work/layers-ext.log"
+    status=1
+fi
+
+# nothing visible: must stop with a message and a failure status
+if ext_python "$repo/xcf_export.py" --output="$work/empty.xcf" \
+        "$here/data/empty.svg" 2>"$work/empty.err"; then
+    echo "FAIL empty: exported although nothing is visible"
+    status=1
+elif grep -q "nothing visible" "$work/empty.err"; then
+    echo "ok   empty stops with a message"
+else
+    echo "FAIL empty: failed without the expected message, see $work/empty.err"
+    status=1
 fi
 
 "$gimp_run" --native --home="$work/home" \
@@ -73,4 +126,5 @@ grep -q "GIMP CHECK DONE" "$work/gimp.log" || {
     exit 1
 }
 
-python3 "$here/compare.py" "$work" "$@" layers-opts
+python3 "$here/compare.py" "$work" $variants || status=1
+exit $status

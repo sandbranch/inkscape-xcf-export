@@ -1,0 +1,18 @@
+# Unit tests and formatting. The end-to-end tests (tests/run.sh) need
+# Inkscape 1.4 and GIMP 3, so they run locally, not here.
+name: tests
+on: [push, pull_request]
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install numpy pytest ruff
+      - run: ruff format --check
+      - run: python -m pytest -q tests/

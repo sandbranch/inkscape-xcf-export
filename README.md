@@ -51,7 +51,7 @@ It finds the Flatpak's folder
 (`~/.var/app/org.inkscape.Inkscape/config/inkscape/extensions`) or the
 native one (`~/.config/inkscape/extensions`); set
 `INKSCAPE_EXTENSIONS_DIR` for another. Or copy `xcf_export.inx`,
-`xcf_export.py` and `xcf_writer.py` there by hand. Restart Inkscape.
+`xcf_export.py`, `xcf_writer.py` and `css_blend.py` there by hand. Restart Inkscape.
 
 From the command line:
 
@@ -64,21 +64,50 @@ From the command line:
   in GIMP also blends with the background layer. Inkscape draws the page
   colour under the finished drawing, so there it does not.
 - 8-bit only, like Inkscape's PNG export by default.
-- Only the first page of a multi-page document.
+- Only the first page of a multi-page document; a layer whose content
+  is only on other pages is left out.
+- An old-style grid such as `spacingx="5mm"` is saved the way Inkscape
+  1.4 draws it, which in a document with a scaled viewBox is not 5 mm
+  (Inkscape uses the length in CSS pixels as user units).
+- When nothing is visible, the export stops with a message, but
+  Inkscape's extension machinery may leave an empty file behind.
 
 ## Tests
 
+Unit tests, no Inkscape or GIMP needed (numpy and pytest; also run on
+GitHub Actions with `ruff format --check`):
+
+    python3 -m pytest tests/
+
+They check the writer (tiles across 64-pixel edges, dummy levels, layer
+group paths, properties, guides) by reading its files back with
+`tests/xcf_dump.py`, and they first check that reader against
+`tests/data/gimp-reference.xcf`, a file GIMP 3.2.8 saved itself with
+known pixels (made by `tests/make_gimp_reference.sh`). The CSS blend
+maths is checked against values worked out by hand from the W3C
+formulas.
+
+End to end, with Inkscape and GIMP 3:
+
     tests/run.sh
 
-Exports every `tests/data/*.svg` (and an options variant), loads each
-XCF in GIMP 3 headless, and checks GIMP's layer tree, guides and grid
-against `tests/data/*.expect.json`, and GIMP's flattened image against
-Inkscape's own PNG export, premultiplied: a file passes when the mean
-difference is under 0.5 of 255 and at most 0.5 % of the pixels differ by
-more than 8. Needs `gimp-console-3.x` and
+Exports every `tests/data/*.svg` (layers and groups, all 15 blend modes,
+filters, clips and clones, blend modes inside isolated groups, two
+pages, a bitmap and text, an old-style grid), plus variants: all option
+switches at 300 dpi, linear light, GIMP's nearest blend modes (which
+must warn), the export through Inkscape's own `.inx` with a throwaway
+profile, and a drawing with nothing visible (which must stop with a
+message). It loads each XCF in GIMP 3 headless and checks GIMP's layer
+tree, guides and grid against `tests/data/*.expect.json`, and GIMP's
+flattened image against Inkscape's own PNG export, premultiplied: a
+file passes when the mean difference is under 0.5 of 255 and at most
+0.5 % of the pixels differ by more than 8. Needs `gimp-console-3.x` and
 [gimp-devtools](https://github.com/sandbranch/gimp-devtools) next to
 this repo (for `gimp-run.sh`, which keeps the test GIMP away from your
-own profile). `tests/xcf_dump.py` prints an XCF's structure.
+own profile).
+
+Not tested yet: the options dialog itself, GIMP 2.10, Inkscape before
+1.4.4, Windows and macOS.
 
 ## How
 

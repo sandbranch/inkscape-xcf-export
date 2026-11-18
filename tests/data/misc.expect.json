@@ -1,0 +1,25 @@
+{
+ "width": 378,
+ "height": 227,
+ "grid_spacing": [
+  35.712,
+  35.712
+ ],
+ "layers": [
+  {
+   "name": "Across both pages",
+   "x": 283,
+   "w": 95
+  },
+  {
+   "name": "Text only"
+  },
+  {
+   "name": "Bitmap",
+   "x": 37,
+   "y": 37,
+   "w": 228,
+   "h": 153
+  }
+ ]
+}

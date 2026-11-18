@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Nothing visible: the export must stop with a message. -->
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+     width="50" height="50" viewBox="0 0 50 50">
+  <g inkscape:groupmode="layer" id="L1" inkscape:label="Empty"/>
+  <g inkscape:groupmode="layer" id="L2" inkscape:label="Off the page">
+    <rect x="100" y="100" width="10" height="10"/>
+  </g>
+</svg>

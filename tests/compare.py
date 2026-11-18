@@ -58,8 +58,10 @@ def subset(expect, got, where="layers"):
         return errors
     if isinstance(expect, list):
         if not isinstance(got, list) or len(got) != len(expect):
-            return ["%s: expected %d entries, got %s" % (
-                where, len(expect), len(got) if isinstance(got, list) else got)]
+            return [
+                "%s: expected %d entries, got %s"
+                % (where, len(expect), len(got) if isinstance(got, list) else got)
+            ]
         errors = []
         for i, (e, g) in enumerate(zip(expect, got)):
             errors += subset(e, g, "%s[%d]" % (where, i))
@@ -69,37 +71,60 @@ def subset(expect, got, where="layers"):
     return []
 
 
+# Variant suffixes: -linear blends in linear light (looks different on
+# purpose), -gimp keeps GIMP's nearest blend modes (looks different on
+# purpose), -ext went through Inkscape's own export path. Other variants
+# (-opts) have their own .expect.json and .ink.png.
+SAME_STRUCTURE = ("-linear", "-ext")
+NO_PIXELS = ("-linear", "-gimp")
+
+
+def base_name(variant):
+    for suffix in SAME_STRUCTURE + NO_PIXELS:
+        if variant.endswith(suffix):
+            return variant[: -len(suffix)]
+    return variant
+
+
 def main():
-    work, names = sys.argv[1], sys.argv[2:]
+    work, variants = sys.argv[1], sys.argv[2:]
     failed = 0
-    for name in names:
-        variants = (name,) if name.endswith("-opts") else (name, name + "-linear")
-        for variant in variants:
-            gimp_json = os.path.join(work, variant + ".gimp.json")
-            if not os.path.exists(gimp_json):
-                print("FAIL %s: GIMP wrote no report" % variant)
-                failed += 1
-                continue
-            with open(gimp_json) as f:
-                info = json.load(f)
-            if "error" in info:
-                print("FAIL %s: GIMP could not load it: %s" % (variant, info["error"]))
-                failed += 1
-                continue
-            expect_path = os.path.join(HERE, "data", name + ".expect.json")
-            if os.path.exists(expect_path):
-                with open(expect_path) as f:
-                    errors = subset(json.load(f), info, "image")
-                for error in errors:
-                    print("FAIL %s structure: %s" % (variant, error))
-                failed += bool(errors)
-                if not errors:
-                    print("ok   %s structure" % variant)
-            if variant.endswith("-linear"):
-                continue  # linear light is meant to look different
-            ok, detail = pixel_check(work, name, variant)
-            print("%s %s pixels: %s" % ("ok  " if ok else "FAIL", variant, detail))
-            failed += not ok
+    for variant in variants:
+        base = base_name(variant)
+        gimp_json = os.path.join(work, variant + ".gimp.json")
+        if not os.path.exists(gimp_json):
+            print("FAIL %s: GIMP wrote no report" % variant)
+            failed += 1
+            continue
+        with open(gimp_json) as f:
+            info = json.load(f)
+        if "error" in info:
+            print("FAIL %s: GIMP could not load it: %s" % (variant, info["error"]))
+            failed += 1
+            continue
+        expect_path = os.path.join(HERE, "data", variant + ".expect.json")
+        if not os.path.exists(expect_path) and variant.endswith(SAME_STRUCTURE):
+            expect_path = os.path.join(HERE, "data", base + ".expect.json")
+        if os.path.exists(expect_path):
+            with open(expect_path) as f:
+                errors = subset(json.load(f), info, "image")
+            for error in errors:
+                print("FAIL %s structure: %s" % (variant, error))
+            failed += bool(errors)
+            if not errors:
+                print("ok   %s structure" % variant)
+        else:
+            print("--   %s structure: no expectations" % variant)
+        if variant.endswith(NO_PIXELS):
+            continue
+        ref = (
+            variant
+            if os.path.exists(os.path.join(work, variant + ".ink.png"))
+            else base
+        )
+        ok, detail = pixel_check(work, ref, variant)
+        print("%s %s pixels: %s" % ("ok  " if ok else "FAIL", variant, detail))
+        failed += not ok
     print("ALL PASS" if not failed else "%d FAILED" % failed)
     return 1 if failed else 0
 

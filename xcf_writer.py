@@ -89,9 +89,19 @@ class Layer:
     """A pixel layer: an H x W x 4 uint8 RGBA array (not premultiplied)
     placed at (x, y) on the canvas."""
 
-    def __init__(self, name, pixels, x=0, y=0, opacity=1.0, visible=True,
-                 mode=MODE_NORMAL, blend_space=None, composite_space=None,
-                 composite_mode=None):
+    def __init__(
+        self,
+        name,
+        pixels,
+        x=0,
+        y=0,
+        opacity=1.0,
+        visible=True,
+        mode=MODE_NORMAL,
+        blend_space=None,
+        composite_space=None,
+        composite_mode=None,
+    ):
         pixels = np.ascontiguousarray(pixels, dtype=np.uint8)
         if pixels.ndim != 3 or pixels.shape[2] != 4:
             raise ValueError("a layer needs H x W x 4 RGBA pixels")
@@ -114,9 +124,18 @@ class Layer:
 class Group:
     """A layer group; children are listed bottom first (document order)."""
 
-    def __init__(self, name, children, opacity=1.0, visible=True,
-                 mode=MODE_PASS_THROUGH, expanded=True, blend_space=None,
-                 composite_space=None, composite_mode=None):
+    def __init__(
+        self,
+        name,
+        children,
+        opacity=1.0,
+        visible=True,
+        mode=MODE_PASS_THROUGH,
+        expanded=True,
+        blend_space=None,
+        composite_space=None,
+        composite_mode=None,
+    ):
         self.name = name
         self.children = list(children)
         self.opacity = float(opacity)
@@ -132,8 +151,12 @@ class Group:
         boxes = [c.bounds for c in self.children]
         if not boxes:
             return 0, 0, 1, 1
-        return (min(b[0] for b in boxes), min(b[1] for b in boxes),
-                max(b[2] for b in boxes), max(b[3] for b in boxes))
+        return (
+            min(b[0] for b in boxes),
+            min(b[1] for b in boxes),
+            max(b[2] for b in boxes),
+            max(b[3] for b in boxes),
+        )
 
 
 def _string(text):
@@ -175,7 +198,7 @@ class _Out:
     def patch(self, slot, value):
         if value >= 1 << 32:
             raise ValueError("XCF file too large for 32-bit offsets (over 4 GB)")
-        self.buf[slot:slot + 4] = _u32(value)
+        self.buf[slot : slot + 4] = _u32(value)
 
 
 def _flatten(items, path=()):
@@ -192,9 +215,10 @@ def _flatten(items, path=()):
 def grid_parasite(xspacing, yspacing, xoffset=0.0, yoffset=0.0):
     """The "gimp-image-grid" parasite as GIMP 3.2 writes it (only the
     spacing and offset, in pixels; GIMP fills in the rest)."""
-    text = ("(xspacing {:f})\n(yspacing {:f})\n(spacing-unit pixels)\n"
-            "(xoffset {:f})\n(yoffset {:f})\n(offset-unit pixels)\n").format(
-                xspacing, yspacing, xoffset, yoffset)
+    text = (
+        "(xspacing {:f})\n(yspacing {:f})\n(spacing-unit pixels)\n"
+        "(xoffset {:f})\n(yoffset {:f})\n(offset-unit pixels)\n"
+    ).format(xspacing, yspacing, xoffset, yoffset)
     return "gimp-image-grid", 1, text.encode("utf-8") + b"\0"
 
 
@@ -219,8 +243,9 @@ class XcfImage:
     def tobytes(self):
         out = _Out()
         out.write(b"gimp xcf v%03d\0" % XCF_VERSION)
-        out.write(struct.pack(">IIII", self.width, self.height, 0,
-                              PRECISION_U8_NON_LINEAR))
+        out.write(
+            struct.pack(">IIII", self.width, self.height, 0, PRECISION_U8_NON_LINEAR)
+        )
         self._write_image_props(out)
 
         items = list(_flatten(self.layers))
@@ -235,18 +260,24 @@ class XcfImage:
 
     def _write_image_props(self, out):
         out.write(_prop(PROP_COMPRESSION, bytes([COMPRESS_ZLIB])))
-        guides = [g for g in self.guides
-                  if 0 <= g[1] <= (self.height if g[0] == "h" else self.width)]
+        guides = [
+            g
+            for g in self.guides
+            if 0 <= g[1] <= (self.height if g[0] == "h" else self.width)
+        ]
         if guides:
-            payload = b"".join(_i32(pos) + bytes([1 if orient == "h" else 2])
-                               for orient, pos in guides)
+            payload = b"".join(
+                _i32(pos) + bytes([1 if orient == "h" else 2]) for orient, pos in guides
+            )
             out.write(_prop(PROP_GUIDES, payload))
         out.write(_prop(PROP_RESOLUTION, struct.pack(">ff", self.dpi, self.dpi)))
         if self.unit in UNITS:
             out.write(_prop(PROP_UNIT, _u32(UNITS[self.unit])))
         if self.parasites:
-            payload = b"".join(_string(name) + _u32(flags) + _u32(len(data)) + data
-                               for name, flags, data in self.parasites)
+            payload = b"".join(
+                _string(name) + _u32(flags) + _u32(len(data)) + data
+                for name, flags, data in self.parasites
+            )
             out.write(_prop(PROP_PARASITES, payload))
         out.write(_prop(PROP_END))
 
@@ -306,8 +337,11 @@ class XcfImage:
         rows, cols = -(-height // TILE), -(-width // TILE)
         slots = [out.pointer_slot() for _ in range(rows * cols)]
         out.write(_u32(0))
-        tiles = (pixels[r * TILE:(r + 1) * TILE, c * TILE:(c + 1) * TILE]
-                 for r in range(rows) for c in range(cols))
+        tiles = (
+            pixels[r * TILE : (r + 1) * TILE, c * TILE : (c + 1) * TILE]
+            for r in range(rows)
+            for c in range(cols)
+        )
         for slot, tile in zip(slots, tiles):
             out.patch(slot, out.pos)
             out.write(zlib.compress(np.ascontiguousarray(tile).tobytes(), 6))

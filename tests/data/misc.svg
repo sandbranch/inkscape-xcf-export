@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Two pages (only the first is exported), an embedded bitmap, a
+     text-only layer, and a grid in the old "5mm" form in a document
+     whose user unit is 0.5 mm. -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+     xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+     width="100mm" height="60mm" viewBox="0 0 200 120">
+  <sodipodi:namedview id="nv" inkscape:document-units="mm" pagecolor="#ffffff">
+    <inkscape:page id="page1" x="0" y="0" width="200" height="120"/>
+    <inkscape:page id="page2" x="220" y="0" width="200" height="120"/>
+    <inkscape:grid id="grid1" type="xygrid" spacingx="5mm" spacingy="5mm" originx="0" originy="0"/>
+  </sodipodi:namedview>
+  <g inkscape:groupmode="layer" id="Lbmp" inkscape:label="Bitmap">
+    <image x="20" y="20" width="120" height="80" preserveAspectRatio="none"
+           xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAAoCAYAAACiu5n/AAAAS0lEQVR4nO3PQQ2AQAAEsYUQ/DsGH715VECvbd+ze+d4723nKKwrrCusK6wrrCusK6wrrCusK6wrrCusK6wrrCusK6wrrCusK6z7AYsFFjFI5dY6AAAAAElFTkSuQmCC"/>
+  </g>
+  <g inkscape:groupmode="layer" id="Ltext" inkscape:label="Text only">
+    <text x="30" y="60" font-family="DejaVu Sans" font-size="24" fill="#123">Häj ẞ 42</text>
+  </g>
+  <g inkscape:groupmode="layer" id="Lp2" inkscape:label="Only on page 2">
+    <rect x="250" y="20" width="100" height="60" fill="#c00"/>
+  </g>
+  <g inkscape:groupmode="layer" id="Lboth" inkscape:label="Across both pages">
+    <rect x="150" y="70" width="150" height="30" fill="#0a0" fill-opacity="0.6"/>
+  </g>
+</svg>
