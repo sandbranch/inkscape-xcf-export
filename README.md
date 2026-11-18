@@ -37,9 +37,10 @@ Options: resolution, sublayers as groups, crop, hidden layers,
 background, guides, grid, blend modes GIMP lacks, and "blend in linear
 light" for GIMP's own default compositing.
 
-Works with Inkscape 1.2 and later (tested with 1.4.4, Flatpak) and any
-GIMP that reads XCF version 10: GIMP 2.10 and 3.x (tested with 3.2.8).
-Needs numpy and Pillow, which Inkscape's Flatpak and Windows builds ship.
+Tested with Inkscape 1.4.4 (Flatpak) and GIMP 3.2.8. It writes XCF
+version 10, which GIMP 2.10 introduced, so GIMP 2.10 should read it too,
+but that is not tested yet; neither are older Inkscape versions or
+Windows. Needs numpy and Pillow (the Inkscape Flatpak has both).
 
 ## Install
 
