@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+    <name>GIMP XCF input</name>
+    <id>org.sandbranch.input.xcf</id>
+    <param name="tab" type="notebook">
+        <page name="options" gui-text="Options">
+            <param name="size" type="optiongroup" appearance="combo" gui-text="Page size:">
+                <option value="resolution">From the image's resolution (dpi)</option>
+                <option value="pixels">One image pixel per px</option>
+            </param>
+            <param name="pixelated" type="bool" gui-text="Show pixels sharp when zoomed in" gui-description="For pixel art: no smoothing between image pixels.">false</param>
+        </page>
+        <page name="help" gui-text="Help">
+            <label xml:space="preserve">Opens a GIMP image with its layers: each GIMP layer becomes an Inkscape layer with its pixels at its position, layer groups become sublayers, and visibility, opacity, blend modes and guides are kept. Layer masks are applied to the pixels.
+
+GIMP 3's layer effects (non-destructive filters) are not applied; some GIMP layer modes have no counterpart in Inkscape. Both are reported when they occur.</label>
+        </page>
+    </param>
+    <input>
+        <extension>.xcf</extension>
+        <mimetype>image/x-xcf</mimetype>
+        <filetypename>GIMP XCF with layers (*.xcf)</filetypename>
+        <filetypetooltip>GIMP image, opened with its layers</filetypetooltip>
+    </input>
+    <script>
+        <command location="inx" interpreter="python">xcf_import.py</command>
+    </script>
+</inkscape-extension>

@@ -1,7 +1,8 @@
-# GIMP XCF export for Inkscape, without GIMP
+# GIMP XCF for Inkscape: open and save, without GIMP
 
 Save an Inkscape drawing as a layered GIMP image: **File > Save As... >
-GIMP XCF with layers (\*.xcf)**.
+GIMP XCF with layers (\*.xcf)**. And open a GIMP image in Inkscape with
+its layers: **File > Open** an `.xcf` file.
 
 Inkscape's own "GIMP XCF maintaining layers" output drives GIMP through
 Script-Fu. It stopped working with GIMP 3, whose Script-Fu no longer has
@@ -13,7 +14,30 @@ XCF file itself, in Python, so it needs no GIMP at all.
 [inkscape/extensions#599]: https://gitlab.com/inkscape/extensions/-/issues/599
 [#521]: https://gitlab.com/inkscape/extensions/-/issues/521
 
-## What you get
+## Opening GIMP files
+
+Inkscape has no XCF import of its own. This one reads the file itself:
+
+- Each GIMP layer becomes an Inkscape layer holding its pixels at their
+  position; layer groups become sublayers.
+- Visibility, opacity and the blend modes CSS has (multiply, screen,
+  overlay, darken, lighten, dodge, burn, hard and soft light,
+  difference, exclusion, hue, saturation, colour, luminosity) stay
+  editable. Other GIMP modes are shown as Normal, with a message.
+- Layer masks are applied to the pixels. Guides come along. The page
+  size follows the image's resolution, or one image pixel per px.
+- Every GIMP 2.10 and 3.x file: 8, 16 and 32-bit integer, half and full
+  float, linear and perceptual, RGB, grey and indexed, RLE and zlib.
+  Pixels come out as 8-bit sRGB.
+- GIMP 3's layer effects (non-destructive filters) are not applied: the
+  layer shows without them, with a message.
+
+Inkscape stacks layers the way SVG does, in sRGB. GIMP composites
+differently (by default in linear light, among other things), so where
+layers are partly transparent or blended, the picture can look somewhat
+different from GIMP's, although every layer's pixels are GIMP's own.
+
+## Saving GIMP files: what you get
 
 - Each layer becomes a GIMP layer, cropped to its content and placed
   where it was. Layers with sublayers become **layer groups**. Objects
@@ -73,6 +97,19 @@ From the command line:
   Inkscape's extension machinery may leave an empty file behind.
 
 ## Tests
+
+The import: `tests/run_import.sh` has GIMP 3 make test files in eight
+variants (8-bit, 16-bit linear, half and full float, 32-bit, grey,
+indexed, and a file with a layer effect, XCF 22), each with groups, a
+mask, opacity, a hidden layer, a blend mode and a layer past the canvas,
+and write every layer's pixels as GIMP itself decodes them. The reader
+must match those (it does exactly, or within one level at half-float
+precision), and Inkscape's render of each file opened through the
+import must match those layers stacked in SVG's way (within 2 levels).
+Opening a file saved by the export gives back the original drawing
+(within 3 levels). `tests/test_reader.py` runs without GIMP.
+
+The export:
 
 Unit tests, no Inkscape or GIMP needed (numpy and pytest; also run on
 GitHub Actions with `ruff format --check`):

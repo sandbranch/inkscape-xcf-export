@@ -21,7 +21,8 @@ if [ "${1:-}" = --uninstall ]; then
     exit 0
 fi
 mkdir -p "$dest"
-for f in xcf_export.inx xcf_export.py xcf_writer.py css_blend.py; do
+for f in xcf_export.inx xcf_export.py xcf_writer.py css_blend.py \
+    xcf_import.inx xcf_import.py xcf_reader.py; do
     ln -sf "$repo/$f" "$dest/$f"
 done
 echo "installed into $dest (restart Inkscape)"
