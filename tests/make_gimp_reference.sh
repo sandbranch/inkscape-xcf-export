@@ -12,7 +12,7 @@ gimp_run=${GIMP_RUN:-$repo/../gimp-devtools/gimp-run.sh}
 gimp_console=${GIMP_CONSOLE:-$(command -v gimp-console-3.2 || command -v gimp-console-3.0 || command -v gimp-console)}
 home=$here/work/refhome
 mkdir -p "$home"
-"$gimp_run" --native --home="$home" --env=GIMP3_DIRECTORY="$home/profile" \
+"$gimp_run" --home="$home" --env=GIMP3_DIRECTORY="$home/profile" \
     --env=TEST_OUT="$here/data/gimp-reference.xcf" -- \
     timeout 120 "$gimp_console" --no-interface --no-data --no-fonts --quit \
     --batch-interpreter python-fu-eval \

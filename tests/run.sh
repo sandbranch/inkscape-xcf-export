@@ -116,7 +116,7 @@ else
     status=1
 fi
 
-"$gimp_run" --native --home="$work/home" \
+"$gimp_run" --home="$work/home" \
     --env=GIMP3_DIRECTORY="$work/home/profile" --env=TEST_XCFS="$xcfs" -- \
     timeout 300 "$gimp_console" --no-interface --no-data --no-fonts --quit \
     --batch-interpreter python-fu-eval \
