@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+     width="300" height="200" viewBox="0 0 300 200">
+  <defs>
+    <radialGradient id="rg"><stop offset="0" stop-color="#fa0"/><stop offset="1" stop-color="#40c" stop-opacity="0.2"/></radialGradient>
+  </defs>
+  <g inkscape:groupmode="layer" id="Lfloor" inkscape:label="Floor">
+    <rect x="0" y="0" width="300" height="200" fill="#8ac"/>
+  </g>
+  <g inkscape:groupmode="layer" id="Liso" inkscape:label="Isolated 70%" style="opacity:0.7">
+    <g inkscape:groupmode="layer" id="Lin1" inkscape:label="Inner base">
+      <circle cx="120" cy="100" r="80" fill="url(#rg)"/>
+    </g>
+    <g inkscape:groupmode="layer" id="Lin2" inkscape:label="Inner hue" style="mix-blend-mode:hue">
+      <rect x="100" y="40" width="150" height="120" fill="#e2e" fill-opacity="0.85"/>
+    </g>
+    <g inkscape:groupmode="layer" id="Lin3" inkscape:label="Inner multiply" style="mix-blend-mode:multiply">
+      <rect x="20" y="120" width="260" height="40" fill="#fc3"/>
+    </g>
+  </g>
+  <g inkscape:groupmode="layer" id="Lpass" inkscape:label="Pass-through">
+    <g inkscape:groupmode="layer" id="Lp1" inkscape:label="Dodge in pass-through" style="mix-blend-mode:color-dodge">
+      <ellipse cx="230" cy="60" rx="60" ry="40" fill="#468"/>
+    </g>
+  </g>
+</svg>

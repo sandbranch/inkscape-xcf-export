@@ -1,0 +1,12 @@
+{
+ "width": 1417, "height": 945,
+ "resolution": [300.0, 300.0],
+ "guides": [],
+ "layers": [
+  {"name": "Top multiply", "x": 0, "y": 0, "w": 1417, "h": 945},
+  {"name": "Middle", "opacity": 50.0, "w": 1417},
+  {"name": "Back"},
+  {"name": "Objects outside layers"},
+  {"name": "Background", "w": 1417, "h": 945}
+ ]
+}

@@ -1,0 +1,13 @@
+{
+ "layers": [
+  {"name": "Pass-through", "mode": 61, "children": [
+    {"name": "Dodge in pass-through (color-dodge)", "mode": 28}
+  ]},
+  {"name": "Isolated 70%", "mode": 28, "opacity": 70.0, "children": [
+    {"name": "Inner multiply", "mode": 30},
+    {"name": "Inner hue (hue)", "mode": 28},
+    {"name": "Inner base"}
+  ]},
+  {"name": "Floor"}
+ ]
+}

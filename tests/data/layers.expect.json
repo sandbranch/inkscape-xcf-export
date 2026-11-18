@@ -1,0 +1,17 @@
+{
+ "width": 454, "height": 302,
+ "resolution": [96.0, 96.0],
+ "guides": [[76, "h"], [113, "v"]],
+ "grid_spacing": [18.898, 37.795],
+ "grid_offset": [7.559, 11.339],
+ "layers": [
+  {"name": "Top multiply", "mode": 30, "visible": true},
+  {"name": "Middle", "opacity": 50.0, "visible": true, "children": [
+    {"name": "Sub hidden", "visible": false, "x": 37, "y": 226},
+    {"name": "Sub one", "visible": true, "x": 264, "y": 188, "w": 115, "h": 77},
+    {"name": "Middle #1", "visible": true}
+  ]},
+  {"name": "Back", "x": 18, "y": 18, "w": 228, "h": 152},
+  {"name": "Objects outside layers", "x": 378, "y": 7}
+ ]
+}

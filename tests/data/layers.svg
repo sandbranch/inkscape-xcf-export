@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+     xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+     width="120mm" height="80mm" viewBox="0 0 120 80" sodipodi:docname="layers.svg">
+  <sodipodi:namedview id="nv" pagecolor="#ffeedd" inkscape:document-units="mm">
+    <sodipodi:guide id="gh" position="0,60" orientation="0,-1"/>
+    <sodipodi:guide id="gv" position="30,80" orientation="1,0"/>
+    <inkscape:grid id="grid1" type="xygrid" originx="2" originy="3" spacingx="5" spacingy="10" units="mm"/>
+  </sodipodi:namedview>
+  <rect id="loose" x="100" y="2" width="15" height="8" fill="#008000"/>
+  <g inkscape:groupmode="layer" id="L_back" inkscape:label="Back">
+    <rect id="r1" x="5" y="5" width="60" height="40" fill="#ff0000"/>
+  </g>
+  <g inkscape:groupmode="layer" id="L_mid" inkscape:label="Middle" style="opacity:0.5">
+    <circle id="c1" cx="50" cy="40" r="20" fill="#0000ff"/>
+    <g inkscape:groupmode="layer" id="L_sub1" inkscape:label="Sub one">
+      <rect id="r2" x="70" y="50" width="30" height="20" fill="#ffff00"/>
+    </g>
+    <g inkscape:groupmode="layer" id="L_sub2" inkscape:label="Sub hidden" style="display:none">
+      <rect id="r3" x="10" y="60" width="20" height="10" fill="#ff00ff"/>
+    </g>
+  </g>
+  <g inkscape:groupmode="layer" id="L_top" inkscape:label="Top multiply" style="mix-blend-mode:multiply">
+    <ellipse id="e1" cx="40" cy="25" rx="30" ry="12" fill="#00ffff"/>
+  </g>
+  <g inkscape:groupmode="layer" id="L_empty" inkscape:label="Empty"/>
+</svg>

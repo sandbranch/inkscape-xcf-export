@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+    <name>GIMP XCF (layers, no GIMP needed)</name>
+    <id>org.sandbranch.output.xcf</id>
+    <dependency type="extension">org.inkscape.output.svg.inkscape</dependency>
+    <param name="tab" type="notebook">
+        <page name="options" gui-text="Options">
+            <param name="dpi" type="float" min="1" max="3000" precision="1" gui-text="Resolution (dpi):" gui-description="Resolution of the XCF image, in dots per inch">96</param>
+            <param name="groups" type="bool" gui-text="Sublayers as layer groups" gui-description="Turn each layer that has sublayers into a GIMP layer group. Off: one GIMP layer per top-level layer.">true</param>
+            <param name="crop" type="bool" gui-text="Crop layers to their content" gui-description="Make each GIMP layer only as large as what it shows. Off: every layer is the size of the page.">true</param>
+            <param name="hidden" type="bool" gui-text="Include hidden layers" gui-description="Save hidden layers too; they stay hidden in GIMP.">true</param>
+            <param name="background" type="bool" gui-text="Add page colour as background layer" gui-description="Add a bottom layer filled with the page colour.">false</param>
+            <param name="guides" type="bool" gui-text="Save guides" gui-description="Save horizontal and vertical guides as GIMP guides.">true</param>
+            <param name="grid" type="bool" gui-text="Save grid" gui-description="Save the first rectangular grid as the GIMP image grid.">false</param>
+            <param name="blend" type="optiongroup" appearance="combo" gui-text="Blend modes GIMP lacks:" gui-description="Color dodge, color burn, soft light, hue, saturation, color and luminosity work differently in GIMP.">
+                <option value="bake">Bake into the layer (looks the same)</option>
+                <option value="gimp">Nearest GIMP mode (stays editable)</option>
+            </param>
+            <param name="linear" type="bool" gui-text="Blend in linear light (GIMP default)" gui-description="Off: layers blend in sRGB, like Inkscape draws them, so the image looks the same in GIMP. On: GIMP's own default.">false</param>
+        </page>
+        <page name="help" gui-text="Help">
+            <label xml:space="preserve">Saves the drawing as a layered GIMP image. GIMP is not needed: this works with GIMP 3 and in the Flatpak.
+
+Each layer becomes a GIMP layer; layers with sublayers become layer groups. Objects outside any layer go to their own layer. Layer visibility, opacity and blend mode stay editable in GIMP. A filter, clip or mask on a layer with sublayers is rendered into a single layer.</label>
+        </page>
+    </param>
+    <output>
+        <extension>.xcf</extension>
+        <mimetype>image/x-xcf</mimetype>
+        <filetypename>GIMP XCF with layers (*.xcf)</filetypename>
+        <filetypetooltip>GIMP image with layers and layer groups</filetypetooltip>
+        <dataloss>true</dataloss>
+    </output>
+    <script>
+        <command location="inx" interpreter="python">xcf_export.py</command>
+        <helper_extension>org.inkscape.output.svg.inkscape</helper_extension>
+    </script>
+</inkscape-extension>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+     xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+     width="200" height="125" viewBox="0 0 200 125">
+  <defs>
+    <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#e33"/><stop offset="1" stop-color="#36e"/></linearGradient>
+    <linearGradient id="g2" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fd0"/><stop offset="1" stop-color="#0a8" stop-opacity="0.4"/></linearGradient>
+  </defs>
+  <g inkscape:groupmode="layer" id="Lbg" inkscape:label="Base"><rect x="5" y="5" width="30" height="30" fill="url(#g1)"/><circle cx="20" cy="20" r="9" fill="#3a7" fill-opacity="0.6"/><rect x="43" y="5" width="30" height="30" fill="url(#g1)"/><circle cx="58" cy="20" r="9" fill="#3a7" fill-opacity="0.6"/><rect x="81" y="5" width="30" height="30" fill="url(#g1)"/><circle cx="96" cy="20" r="9" fill="#3a7" fill-opacity="0.6"/><rect x="119" y="5" width="30" height="30" fill="url(#g1)"/><circle cx="134" cy="20" r="9" fill="#3a7" fill-opacity="0.6"/><rect x="157" y="5" width="30" height="30" fill="url(#g1)"/><circle cx="172" cy="20" r="9" fill="#3a7" fill-opacity="0.6"/><rect x="5" y="43" width="30" height="30" fill="url(#g1)"/><circle cx="20" cy="58" r="9" fill="#3a7" fill-opacity="0.6"/><rect x="43" y="43" width="30" height="30" fill="url(#g1)"/><circle cx="58" cy="58" r="9" fill="#3a7" fill-opacity="0.6"/><rect x="81" y="43" width="30" height="30" fill="url(#g1)"/><circle cx="96" cy="58" r="9" fill="#3a7" fill-opacity="0.6"/><rect x="119" y="43" width="30" height="30" fill="url(#g1)"/><circle cx="134" cy="58" r="9" fill="#3a7" fill-opacity="0.6"/><rect x="157" y="43" width="30" height="30" fill="url(#g1)"/><circle cx="172" cy="58" r="9" fill="#3a7" fill-opacity="0.6"/><rect x="5" y="81" width="30" height="30" fill="url(#g1)"/><circle cx="20" cy="96" r="9" fill="#3a7" fill-opacity="0.6"/><rect x="43" y="81" width="30" height="30" fill="url(#g1)"/><circle cx="58" cy="96" r="9" fill="#3a7" fill-opacity="0.6"/><rect x="81" y="81" width="30" height="30" fill="url(#g1)"/><circle cx="96" cy="96" r="9" fill="#3a7" fill-opacity="0.6"/><rect x="119" y="81" width="30" height="30" fill="url(#g1)"/><circle cx="134" cy="96" r="9" fill="#3a7" fill-opacity="0.6"/><rect x="157" y="81" width="30" height="30" fill="url(#g1)"/><circle cx="172" cy="96" r="9" fill="#3a7" fill-opacity="0.6"/></g>
+  <g inkscape:groupmode="layer" id="Lm0" inkscape:label="multiply" style="mix-blend-mode:multiply">
+    <rect x="13" y="13" width="34" height="34" fill="url(#g2)" opacity="0.8"/>
+  </g>
+  <g inkscape:groupmode="layer" id="Lm1" inkscape:label="screen" style="mix-blend-mode:screen">
+    <rect x="51" y="13" width="34" height="34" fill="url(#g2)" opacity="0.8"/>
+  </g>
+  <g inkscape:groupmode="layer" id="Lm2" inkscape:label="overlay" style="mix-blend-mode:overlay">
+    <rect x="89" y="13" width="34" height="34" fill="url(#g2)" opacity="0.8"/>
+  </g>
+  <g inkscape:groupmode="layer" id="Lm3" inkscape:label="darken" style="mix-blend-mode:darken">
+    <rect x="127" y="13" width="34" height="34" fill="url(#g2)" opacity="0.8"/>
+  </g>
+  <g inkscape:groupmode="layer" id="Lm4" inkscape:label="lighten" style="mix-blend-mode:lighten">
+    <rect x="165" y="13" width="34" height="34" fill="url(#g2)" opacity="0.8"/>
+  </g>
+  <g inkscape:groupmode="layer" id="Lm5" inkscape:label="color-dodge" style="mix-blend-mode:color-dodge">
+    <rect x="13" y="51" width="34" height="34" fill="url(#g2)" opacity="0.8"/>
+  </g>
+  <g inkscape:groupmode="layer" id="Lm6" inkscape:label="color-burn" style="mix-blend-mode:color-burn">
+    <rect x="51" y="51" width="34" height="34" fill="url(#g2)" opacity="0.8"/>
+  </g>
+  <g inkscape:groupmode="layer" id="Lm7" inkscape:label="hard-light" style="mix-blend-mode:hard-light">
+    <rect x="89" y="51" width="34" height="34" fill="url(#g2)" opacity="0.8"/>
+  </g>
+  <g inkscape:groupmode="layer" id="Lm8" inkscape:label="soft-light" style="mix-blend-mode:soft-light">
+    <rect x="127" y="51" width="34" height="34" fill="url(#g2)" opacity="0.8"/>
+  </g>
+  <g inkscape:groupmode="layer" id="Lm9" inkscape:label="difference" style="mix-blend-mode:difference">
+    <rect x="165" y="51" width="34" height="34" fill="url(#g2)" opacity="0.8"/>
+  </g>
+  <g inkscape:groupmode="layer" id="Lm10" inkscape:label="exclusion" style="mix-blend-mode:exclusion">
+    <rect x="13" y="89" width="34" height="34" fill="url(#g2)" opacity="0.8"/>
+  </g>
+  <g inkscape:groupmode="layer" id="Lm11" inkscape:label="hue" style="mix-blend-mode:hue">
+    <rect x="51" y="89" width="34" height="34" fill="url(#g2)" opacity="0.8"/>
+  </g>
+  <g inkscape:groupmode="layer" id="Lm12" inkscape:label="saturation" style="mix-blend-mode:saturation">
+    <rect x="89" y="89" width="34" height="34" fill="url(#g2)" opacity="0.8"/>
+  </g>
+  <g inkscape:groupmode="layer" id="Lm13" inkscape:label="color" style="mix-blend-mode:color">
+    <rect x="127" y="89" width="34" height="34" fill="url(#g2)" opacity="0.8"/>
+  </g>
+  <g inkscape:groupmode="layer" id="Lm14" inkscape:label="luminosity" style="mix-blend-mode:luminosity">
+    <rect x="165" y="89" width="34" height="34" fill="url(#g2)" opacity="0.8"/>
+  </g>
+</svg>
